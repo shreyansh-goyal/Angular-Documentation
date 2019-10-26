@@ -1,0 +1,630 @@
+ANGULAR FORM 
+
+TEMPLATE DRIVEN FORM 
+CONVERT TO THE OBJECT FORM FROM THE GIVEN TEMPLATE.
+
+
+REACTIVE
+FORM IS CREATED PROGRAMITICALLY AND SYNCHRONIZED WITH THE DOM.
+
+
+
+TEMPLATE DRIVEN FORM 
+
+->IMPORT THE FormsModule FROM THE @angular/forms
+->ADD THIS TO THE MODULE DEPENDENCY LIST.
+->NOW CONSTRUCT A FORM 
+->EACH THING YOU WANT TO PEAK IN THE FORM OR YOU WANT A OBJECT OF DO THIS.
+
+            <input 
+            type="text"
+            id="username" 
+            class="form-control"
+            ngModel
+            name="username">
+
+
+
+
+CREATE A NGMODEL AND NAME TO HAVE A OBJECT WITH KEY OF NAME VALUE WHICH POINTS TO THE ACTUAL VALUE OF THE ATTRIBUTE.
+
+
+(ngSubmit)="onSubmit(f)" #f="ngForm"
+
+WE HAVE A DEFAULT DIRECTIVE ON THE ANGULAR WHICH HELPS ngSubmit THIS DIRECTIVE HELPS US TO CALL A FIUNCTION ON THE SUBMIT OF THE FORM.
+
+WE USE LOCAL REFERENCE TO PASS THE DATA TO THE FUNCTION AND USE ngForm DIRECTIVE IN THE LOCALREFERENCE SO THAT WE CAN STATE THAT IT IS A FORMS DATA.
+THEN WE CAN HANDLE THE FUNCTION ON SUBMIT IN THE FOLLOWING WAY.
+
+  onSubmit(form:NgForm)
+  {
+    console.log(form)
+  }
+
+
+WE CAN ALSO USE THE VIEW CHILD TO ACCESS THE LOCAL REFERNECE 
+LIKE THIS
+
+@ViewChild('f') signupForm:NgForm
+
+
+
+
+
+
+
+IN THE TEMPLATE WE HAVE VARIOUS TYPES OF VALIDATORS SOME ARE FROM THE HTML WHILE OTHER ARE CREATED BY THE ANGULAR.
+THIS CAN BE SEEN AS FOLLOWS
+
+REQUIRED->WE WILL REQUIRE THAT FIELD 
+EMAIL->INPUT MUST BE OF TYPE MAIL.
+
+
+
+
+
+ANGULAR AUTOMATICALLY ADDS THE CLASSES TO THE TO ADD THE DYNAMIC BEHAVIOUR TO THE FORMS.LIKE ng-touched,ng-valid,ng-invalid
+AND SO ON THESE CLASSES PLAYS A MAJOR ROLE IN THE ADDING THE DYNAMIC BEHAVIOUR TO THE FORMS.
+
+
+
+
+ACCESSING THE VALIDITY OF THE PARTICULAR FORM ELEMENT
+
+WE CAN CREATE A LOCAL REFERENCE AND THEN WE CAN ACCESS THAT.
+
+
+
+->	GIVING A DEFAULT VALUE TO THE NG MODEL
+	[ngModel]="DEFAULT_VARIABLE"
+
+	NOW WE CAN SET THIS VARIABLE
+
+
+
+->	WE CAN ALSO USE THE TWO WAY DATA BINDING FOR THIS PURPOSE AND CAN UTILIZE IT IN EFFICIENT WAY
+	FOR THIS WE FOLLOW THE CODE WRITTEN AS FOLLOWS
+	<text-area>
+		name="questionAnswer"
+		rows="3"
+		[(ngModel)]="answer">
+	</text-area>
+
+
+
+->GROUPING THE FORM CONTROL
+	WHENEVER WE WANT TO GAIN CONTROL OVER THE SOME OF GROUP OF COMPONENT WE USE THIS TECHNIQUE.
+	CERTAIN COMPONENTS OF THE FORM CAN BE GROUPED TOGETHER AND WE CAN WORK WITH THEM
+	SYNTAX:-
+	        <div id="user-data" ngModelGroup="userData">
+		AFTER THIS WE WILL HAVE A ADDITIONAL FIELD FOR THIS TASK.
+		WE CAN ALSO DO THIS
+	        <div id="user-data" ngModelGroup="userData" #hello="ngModelGroup">
+
+
+->	SETTING THE INITIAL VALUE OF THE  FORM DATA 
+	THIS CAN BE DONE USING THE TWO FUNCTIONS NAMED setValue and PatchValue
+	SET VALUE IS USED WHEN WE ARE SPECIFYING ALL THE VALUES CORROSPONDING TO THE FORM GROUP WE HAVE
+	PATCH VALUE IS USED WHEN WE WANT TO SPECIFY CERTAIN VALUES IN THE FORM GROUP
+
+	SYNTAX 
+	SET VALUE
+	this.FormData.setValue({
+	      userData:{
+        	username:"shreyansh",
+        	search:"shreyanshgoyal90@gmail.com"
+      	},
+      	secret:"pet"
+    	})
+
+	PATCH VALUE
+	this.FormData.form.patchValue({
+      	userData:{
+        username:"shreyansh"
+      	}
+    	})
+
+-> 	RESETING THE FORM 
+	WE CAN RESET THE FORM ONCE WE HAVE UTILIZED THE FORM AND ITS DATA.
+	THIS CAN BE DONE IN THE FOLLOWING WAY IT WILL NOT JUST RESET THE FORM DATA BUT ALSO RESET ITS PROPERTY LIKE TOUCHED DIRTY ETC
+	SYNTAX
+	this.signupForm.reset();
+		
+
+
+
+
+
+REACTIVE APPROACH 
+
+
+GENERAL STEPS TO USE THIS APPROACH
+IMPORT THE ReactiveFormsModule IN THE IMPORTS OF THE ANGULAR.MODULE.TS
+NOW WE HAVE TO DO THE FOLLOWING STEPS
+IMPORT THE FormContorl AND FormGroup FROM THE @angular/forms
+NOW FOLLOW THIS SYNTAX OF THE CODE 
+export class AppComponent implements OnInit{
+  genders=["male","female"];
+  signupForm:FormGroup;
+  ngOnInit()
+  {
+    this.signupForm = new FormGroup({
+      'username':new FormControl(null),//WE USE THE STRING HERE SO THAT IT WILL NOT CAUSE ANY PROBLEM IF THIS GETS REPLACED DURING THE CODE MINIFICATION
+      'email':new FormControl(null),//FORM CONTROL HAVE THREE FIELD 1)INITIALIZATION 2)VALIDATOR ARRAY 3)ASYNCHRONOUS VALIDATOR
+      'gender':new FormControl('male')
+    }) 
+  }
+}
+
+
+
+
+-> NOW COMES HOW TO CONNECT THE REACTIVE FORM TO THE HTML FORM 
+      <form [formGroup]="signupForm">
+      [formControlName]="'username'"
+      formControlName="email"   //to assign the value to the directive we  use square brackets however in case of the strings we do this 	things.
+
+->SUBMITING THE FORM 
+USE THIS CODE IN THE FORM TAG
+(ngSubmit)="onSubmit()"
+
+
+
+
+->NESTED FORM GROUP
+
+	THIS.SIGNUPFORM=NEW FORMgROUP({
+	'USERDATA': NEW FORMGROUP({
+	SOMEOTHER VARIABLE	
+	})		
+		
+	})
+
+NOW WE WILL NEED TO DO THE WORK TO SET THIS
+CREATE A NEW DIV
+AND PLACE THERE A NEW VARIABLE SET FORMGROUPCONTROL='USERNAME'
+AND THEN WE CAN SET THE VALUE
+
+
+
+
+
+->FORMS ARRAY
+	NOW WE HAVE TO COME THROUGH THE FORMS ARRAY
+	WHAT IS THIS FORMS ARRAY.IT HELPS US TO CREATE A ARRAY OF FORM CONTROLS SO THAT WE CAN MANIPUATE THEM ADD VALIDATORS ON THEM AND NOT 		THE LEAST WE CAN ADD DYNAMIC NUMBER OF INPUTS.
+
+
+	TO CREATE ONE FOLLOW THIS SYNTAX OF THE CODE.
+	this.signupForm = new FormGroup({
+	'hobbies':new FormArray([]);
+	}) 
+
+	onAddHobby()
+	{11
+		const control = new FormControl(null,Validators.required);
+		(<FormsArray>this.signupForm.get('hobbies')).push(control);
+
+	}
+
+
+	<div FormArrayName="hobbies">
+		<div class="form-group" *ngFor="let hobbieControl of signupForm.get('hobbies').controls;let i=index;">
+			<input type="text" class="from-control" [formControlName]="i">
+		</div>	
+	</div>
+
+
+
+
+
+
+
+->ASYNCHRONOUS VALIDATORS
+	CODE I CAN UNDERSTAND
+		forbiddenEmails(control:FormControl):Promise<any>|Observables<any>{
+			const promise = new Promise((resolve,reject)=>{
+				if					
+				setTimeout(()=>{resolve('emailvalidation':true)},1500);
+				else
+				resolve(null);					
+			})
+		return promise;
+		}
+	ADD THIS CODE TO THE FORMCONROL THIRD PARAMETER
+THEN WE WIL GET THE SUITABLE ASYNC VALIDATORS
+
+
+
+
+
+
+
+FORMS OBSERVABLES
+
+		VALUECHANGES 
+		THIS WILL WORK EVERYTIME WE CHANEG THE VALUE OF THE FORM.EVERY TIME THE VALUE IS CHANGED WE GET THE COMPLETE OBJECT 			REPRESENTING THE VALUE SET.
+		this.signupform.valueChanges.subscribe((values)=>{console.log(values)});
+		STATUSCHANGES 
+		THIS WILL WORK UPON THE STATUS CHANGE AND WILL REPORT TO US WHENEVER THE STATUS IS CHANGED LIKE 
+		VALID
+		INVALID
+		PENDING ETC
+		this.signupform.statusChanges.subscribe((status)=>{console.log(status)});		
+		WE CAN ALSO APPLY THIS TO INDIVIDUAL FORM AS WELL AS THE COMPLETE FORM
+
+
+SETVALUE AND PATCHVALUE IN THE FORM CONTROL
+	this.signupForm.setValue({
+	'userData':{
+	'username':'MAx',
+	'email':"shreyanshgoyal9@gmail.com"	
+	},
+	'gender':'male',
+	'hobbies':[]		
+	}) 
+
+SIMILARLY WE HAVE PATCH VALUE
+
+
+THEN WE HAVE GOT RESET FUNCTION
+	this.sugnupForm.reset();
+
+
+
+
+OBSERVABLE
+OBSERVABLE IS SOMETHING THAT HELPS US TO TRIGGER SOME CODE OR TRIGGER SOME SORT OF THE EVENT THAT WE WANT AND HELP TO REACT TO THAT EVENT.
+
+IT ACCEPT A OBSERVER AND CALL THE NEXT TO INDICATE THIS NEXT DATA IS TO BE PASSED TO THE OBSERVER WE CAN ALSO GIVE THE ERROR AND WE CAN ALSO SET THE COMPLETION PART OF THE OBSERVABLE.
+
+
+
+
+
+
+subject
+just like the observable but help us to emit the new data in our code.
+so basically it helps us to push the data into the subject and subscribe it somewhere else so that we can get the data whenver someone is pushing the data and can work with it.
+create a service
+import {Subject} from 'rxjs/Subject'
+export classUSerService{
+	authService = new Subject();
+	}
+
+
+
+
+
+
+
+
+
+
+PIPES
+
+helps us to tranform output in the application
+
+like uppercase and date
+{{server.started|date:"fullDate"}} passing the parameter 
+
+
+
+
+multiple pipes can be used simultaneously
+{{server.started|date:"fullDate"|uppercase}}
+IN ABOVE IMPLEMENTATION ORDER OF THE PIPES ARE VERY IMPORTANT.IMPLEMENTATION OF PIPES ARE OCCURED FROM LEFT TO RIGHT.SUCH THAT ONE IMPLEMENTATION ACTS INPUT FOR SECOND THIS MAKES THE ORDER VERY IMPORTANT.
+
+
+
+
+
+CREATING OUR OWN PIPE 
+->CREATE A NEW TS FILE
+
+@pipe({
+ name:'shorten'
+})
+
+export class shorten implements PipeTransform{
+	transform(value:any,limit)
+	{
+	 return value.substr(0,limit number);	
+	}
+}
+
+add pipe to the declaration in module.ts
+
+
+
+generating the pipe through the angular cli
+
+ng g p pipename
+
+THERE MAY BE SOME CASES IN WHICH THE ANGULAR MIGHT BE RECIEVING THE ASYNCHRONUS DATA AN WE NEED TO HANDLE THAT DATA.FOR THAT CASE WE WILL USE PROMISE IN SOME CASES IT WILL NOT CHANGE DESPITE WE RECIEVED THE DATA THUS IN THAT CASE WE CAN USE THE ASYNC FILTER TO DO THE DESIRED TASK
+{{appstatus|async}}
+
+
+
+
+
+how can we maintain the sessions in the angular when setting up the backend for the api purpose only
+
+
+
+
+HTTP REQUESTS 
+
+import {HttpModule} in the app module
+
+
+code for the http request
+
+import {Injectable} from "@angular/core";
+import {Http} from "@angular/http"
+
+@Injectable()
+export class Serverserivce{
+
+constructor(private http:Http)
+{}
+
+
+storeServer(server:any[])
+{
+const headers = new Headers({'Content-Type':'application/json'})
+
+return
+this.http.post('url',server,{headers:headers});
+			     //angular is using the observable behind the scenes.Thus statement is only creating the observables
+			     //also the request is not sending just because until we have not subscribe to the obsevable there is no point in 				     //sending the request
+}	
+
+}
+
+
+
+
+Now ideally we need to use this service and do our work
+
+onSave(){
+this.serverService.storeServers(this.servers).subscribe((response)=>{},(error)=>{})
+}
+
+
+
+
+
+
+
+GET DATA CODE FOR THE SERVERS
+
+getServers()
+{
+return this.http.get('some url');
+}
+
+onGet()
+{
+this.serverService.getServers().subscribe((response:Response)=>{
+	const data = response.json();
+	console.log(data);			
+	},
+	(error)=>{
+	console.log(error);
+	}
+)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								MODULES TALKS
+WE CAN SPLIT THE APPLICATION INTO THE NUMBER OF COMPONENTS.TO INCREASE THE EFFICIENCY OF THE APPLICATION
+
+FEATURE MODULES
+WHEN THE APP MODULE BECOMES SO HEAVY WE DIVIDE THE MODULES AS THERE RESPECTIVE TASK.THESE MODULES ARE RESPONSIBLE FOR THERE FEATURE AND WE CAN CONFIGURE THOSE FEATURES FROM THAT MODULE.
+THIS MAKE THE DEPENDENCIES BECOME MODULAR AND AT LAST THIS WILL HELP US TO BOOST THE PERFORMANCE OF THE APPLICATION AS THE APPLICATION GOES BIG.
+
+
+
+
+CREATING A FEATURE MODULE
+WE NEED TO MOVE ALL THE RESPECTIVE COMPONENT AND SERVICE TO THIER RESPECTIVE MODULE.
+HOWEVER IF A SERVICE IS BIENG USED IN MORE THAN ONE MODULE THEN WE SHOULD DEFINE IT IN THE APP MODULE.AT LAST ALL THESE MODULES WILL BE MERGED SO WE DON'T HAVE TO WORRY ABOUT THAT.
+
+COMMON MODULE
+IT GIVES THE ACCESS TO SOME OF THE GENERAL PROPERTIES LIKE NGIF NGFOR AND OTHER COMMON PROPERTIES AND THE DIRECTIVES.
+
+BROWSERMODULE SHOULD BE USED ONLY IN THE APP MODULE
+
+
+SHARED MODULES
+THERE ARE TIMES WHEN WE WANT THE SAME COMPONENT IN TWO MODULES FOR SUCH CASES WE USE THE SHARED MODULE.SHARED MODULE HELPS US TO ACCESS THE SAME MODULE AT MULTIPLE PLACES IN THE SAME APPLICATION.
+
+CODE 
+@NgModule({
+
+declaration:[
+componentToBeShared
+],
+exports:[
+CommonModule,
+DropDownDirective
+]
+})
+and then we should import 
+
+
+
+
+
+SHOPPING LIST MODULE
+WHENEVER WE WANT TO USE A DERICTIVE,COMPONENT OR ANYTHING ELSE WE NEED TO DECLARE THAT AND IMPORT THAT IN THE RESPECIVE MODULE.IF WE ARE NOT IMPORTING THEN WE NEED TO IMPORT A COMPONENT WHICH IS EXPORTING THE DESIRED THE THING LIKE IN THE SHARED MODULE.
+THIS MAKE THE ROUTING AND SELECTOR MAKES THE DIFFERENT THING.
+
+
+LAZY LOADING
+LOADING THE MODULES AS PER THE REQUIREMENT.WE CAN LAZY LOAD THE MODULE IF IT REQUIREMENT DEPENDS UPON THE USER AND NOT REQUIRED IN ALL CASES.
+
+->generate a new component home.
+->create this component and redirect the root route to this new component so that we can enable the lazy loading for the recipe component.
+->Now remove the file from the app.module of the component that we want to load lazily.
+->in the routes make a new route and add a property of loadChildren here specify the path of the component that you want to load.
+{path:'recipe',loadChildren:'./recipes/recipes.module#classname'}
+->also change the routes of the recipe component such that those routes are now relative.
+
+
+
+
+
+SERVICE INJECTION 
+SUPPOSE WE HAVE THREE MODULES 
+APP MODULE: WE ADD A SERVICE IN THE PROVIDER ARRAY
+SHOPPING MODULE:WE ADD THE SAME SERVICE IN THE PROVIDER ARRAY
+LAZY LOADING MODULE:WE DON'T ADD THE SERVICE HERE IN THE PROVIDER BUT WE ARE USING THEM IN THE COMPONENT.
+
+NOW DESPITE WE SHOULD HAVE DIFFERENT INSTANCE OF THE SERVICE IN THE FIRST TWO MODULES THAT DOSEN'T WORK SO.ANGULAR HAVE A ROOT INJECTER IN CASE OF THE FEATURE MODULE AND WE USE THEM TO ACCESS TO OUR SERVICES.
+
+
+
+
+HOWEVER IF WE INJECT THE SERVICE IN THE PROVIDERS ARRAY OF THE LAZY LOADED MODULE WE WOULD EXPECT A NEW INSTANCE FOR THE LAZY LOADED MODULE.BECAUSE IT WOULD WORK LIKE THAT FOR THAT MODULE.
+
+WE SHOULD NOT PROVIDE THE INJECTION OF THE SERVICE IN THE PROVIDERS ARRAY OF THE SHARED MODULE.
+
+
+CORE MODULE
+THINGS THAT BELONG TO CORE OF THE APPLICATION SHOULD BELONG TO THE CORE MODULE OF THE APPLICATION.THIS CORE MODULE IS CONSTRUCTED TO MAKE OUR APPLICATION MORE CLEANER TO CODE AND MAINTAIN.
+
+
+
+AHEAD OF TIME COMPILATION AND JUSIN IN TIME COMPILATION
+
+
+JUST IN FILE COMPILATION
+DEVELOPMENT 
+PRODUCTION
+DOWNLOADED IN THE BROWSER
+COMPILE THE TEMPLATES INTO THE JAVASCRIPT FOR THE FASTER PERFORMANCE
+
+
+AHEAD OF TIME COMPILER
+DEVELOPMENT 
+COMPILE THE TEMPLATES INTO THE JAVASCRIPT FOR THE FASTER PERFROMANCE
+PRODUCTION
+DOWLOADED ON TO THE CHROME
+
+
+
+
+ADVANTAGES OF AHEAD OF TIME COMPILATION
+FASTER STARTUP
+TEMPLATES GET CHECKED UP AND THROW ERROR IF ANY
+MUCH SMALLER FILE SIZE SINCE COMPILER WILL SHIP IN CASE OF THE JUST IN TIME COMPILATION
+AND ALLOW THE ANGULAR TO STRIP OF SOME FEATURES WE ARE NOT USING AUTOMATICALLY
+
+
+
+AHEAD OF TIME COMPILATION 
+ng build --prod --aot 
+
+
+PRELOADING THE APPLICATION
+ 
+imports:[
+RouterModule.forRoot(appRoutes,{preloadingStratergy:PreloadAllModules})
+]
+
+
+
+
+HTTP CLIENT
+HOWEVER WE CAN USE THE OLD HTTPMODULE FOR THE HTTP SERVICE IN THE ANGULAR.THE HTTPCLIENT COMES WITH SOME NEW FUNCTIONS AND SERVICES WHICH WOULD BE NICE TO USE.THE OLDER VERSION IS NOT DEPRECATED AND CAN BE USED.IT IS NOT DEPRECATED AND HAVE NO SECURITY CONCERNS FOR SO NOW.
+
+
+WHAT FUNCTIONALITY HTTPCLIENT NOW BRING TO US
+IT WORKS IN THE SIMILAR WAY AS THE HTTP BUT NOW WE DON'T NEED TO PARSE THE RESPONSE AS WE NEED TO DO IN THE HTTP.HTTP CLIENT AUTOMATICALLY PARSES THE BODY AND EXTRACT THE DATA WE IN NEED OF.HOWEVER WE CAN CHANGE THIS CONFIGURATION AND CAN MAKE HTTP CLIENT TO HAVE A REPONSE WITH THE HEADER.
+
+
+FOR THE CODE WE CAN REFER TO THIS SYNTAX
+
+IMPORT THE HTTP CLIENT AND REMOVE THE HTTP AND RESPONSE
+
+	this.httpClient.get<Recipe[]>('url'+token).map((recipes)=>{for(let recipe of recipes){......}))
+	SO THIS IS BASIC CODE THAT I CAN REFER WE CAN REFER TO THE GENRIC TYPE HERE RECIPE[] WHICH WAS NOT AVAILABLE EARLIER
+
+NOW SINCE WE ARE GETTING THE JSON DATA AUTOMATICALLY CONVERTED AND SERVED TO US BY THE HTTP CLIENT WE CAN ALSO CONFIGURE THE HTTP CLIENT TO GO FOR THE DATA OTHER THAN THE MAIN BODY AND CAN ALSO GET THE RESPONSE IN MODE OTHER THAN THE JSON
+
+CODE FOR THIS
+
+this.http.get('url',{
+observe:'body',
+responseType:'json'
+
+})
+
+
+HTTP EVENTS 
+THERE CAN BE MANY HTTP EVENTS THAT WE CAN SUBSCRIBE USING THE HTTP CLIENT.THIS HTTP CLIENT NOT ONLY HELPS US TO SUBSCRIBE THOSE EVENTS BUT THESE DIIFERENT CAN PLAY SIGNIFICANT ROLE IN SOME COMPUTATION DURING THAT PERIOD OF THE EVENT.
+
+SYNTAX:
+this.http.put('url',body,{observe:'events'})
+
+some other file
+
+onSavaData()
+{
+this.dataStorageService.storageRecipes().subscribe(response:HttpEvent<Object>)=>{console.log(response.type===HttpEventType.Sent);
+});
+}
+
+so like this we can subscribe to those events and handle appropriate code for those events.
+
+
+
+SETTING THE HTTP HEADER
+CODE
+this.httpClient.put('url',body,{
+observe:'body',
+headers:new HttpHeaders().set('Authorization','Bearer some random token')
+params: new HttpParams().set('auth',token)
+})
+
+
+
+HTTP INTERCEPTOR 
+HTTP INTERCEPTOR IS A HELPFUL TOOL IN THE ANGULAR.THIS HELP US TO SCHEDULE SOME TASK WHICH WILL GET GET EXECUTED BEFORE SENDING ANY REQUEST.
+WE CAN TRAP THE REQUEST AND CAN DO THE APPROPRIATE ACTIONS ON THAT REQUEST.
+
+CODE SYNTAX
+
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+
+export class AuthInterceptor implements HttpInterceptor{
+intercept(req:HttpRequest<any>,next:HttpHandler):Observable<HttpEvent<any>>{
+    console.log('Intercepted',req);
+    return next.handle(req);
+}
+}
+})
+{provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}

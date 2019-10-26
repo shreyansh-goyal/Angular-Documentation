@@ -1,0 +1,124 @@
+There are some scripts in the main page of the index.html when we start the angular webpage however these scripts help us to replace all the component with this actual material so that we can inject in the main file
+
+Main.ts is executed first help to do this
+
+go the main.ts there we will have 
+
+platformBrowserDynamic().bootstrapModule(AppModule);--------------this line connects the App Module to the index.html so that we cann load our content over thier.This refers to the app.module.ts
+
+app.module.ts----------------------this contain bootstrap array which contain list of all the components index.html will be requiring
+where the component we are reffering by bootstrap array is refering to the tag name.
+
+
+
+
+CREATING A COMPONENT IN THE ANGULAR 
+For creating a component we need to create a seprate folder this is not hard rule but we need to maintain this rule to make our model look consistent.
+This folder must have a typescript file named after the componentname.component.ts
+This should contain basic information about the component. 
+eg
+import {Component} from "@angular/core";
+@Component({
+    selector:"app-server",
+    templateUrl:'./server.component.html'//we need to create and refer this file in the same folder
+})
+export class ServerComponent{}
+This is the required code for this purpose.
+
+
+Now we need to registr the componenet so that we can use the component anywhere in the angular and don't need to import that component again and again.
+ We will go to the app module the bootstraping module and then we have to type this
+import {ServerComponent } from './server/server.component';
+and then include that ServerComponent in the declaration section.
+
+
+CREATING COMPONENTS THROUGHT THE COMMAND LINE INTERFACE
+
+we can type 
+ng n c newcomponentname
+this command can create new component with ease.
+
+
+
+
+DYNAMIC DATABINDING IN THE ANGULAR 
+DATABINDING = COMMUNICATION
+STRING INTERPOLATION{{DATA}}
+PROPERTY BINDING([PROPERTY]="DATA")
+EVENT BINDING
+TWO WAY DATA BINDING
+
+
+
+STRING INTERPOLATION
+This is used for the dynamic data binding between the typescript and the html template.
+We do string interpolation by using {{}} this will only return the string and cannot include the block statements.
+We define the varible and function in the typescript class and then we can use them using the string interpolation.
+
+
+
+PROPERTY BINDING 
+Property binding is basically used to bind the html properties so that we can shange them dynamically.This is also used with other aspects such as directive for the angular.
+We can show the example of the property binding as follows.
+
+<button class="btn btn-primary" [disabled]="!allowNewServer">my button</button>  [disabled] ="!allowNewServer"
+[innerText]="allowNewServer"
+
+
+EVENT BINDING 
+this type of binding is used to the model with the events occuring on our view.So that whenever a event is occured we can perform a specific operation on the model we get.
+We can also pass the data to the function that we want to call when a event is occured.So many of task is solved using this event binding.
+
+
+basic example:
+we can bind the event by using the format like this.
+(event name)="callsomefunction()"
+and we can send the event to the function by
+(event name)="callsomefunction($event)"
+
+<button class="btn btn-primary" [disabled]="!allowNewServer" (click)="onCreateServer()">my button</button>
+<input type="text" (input)="changeTheData($event)">
+
+then we can use those function to perform the necessary task in various files.
+
+
+
+TWO WAY DATA BINDING
+We know how we can do the two way data binding like in the angular we have used the ng model for the two way data binding we use it here for the  same.
+ng model for any change in the tag cause to update a variable named against ng model and we use this to gather the data of that element.We mostly use this type of data binding with the input model.
+
+Syntax
+<input [(ngModel)]="serverName">
+<p>serverName</p>
+
+This can be used to play with the ngModel
+
+
+
+DIRECTIVES
+These are the instruction in the dom.
+
+
+ngIf
+This is structural directive that is a directive that can add some content or can remove some content from the ngIf.Thus we have to precede it with a star. 
+These can help in the conditional display of the work we need to display.
+like
+<p *ngIf="servercreated">hello everyone</p>
+thus if the expression is true the tag will appear otherwise it will never appear.
+We can also have a else condition in the ngIf
+<p *ngIf="servercreated";else noServer>hello everyone</p>
+<ng-template #noServer>
+<p >hello everyone</p>
+</ng-template>
+
+
+ngStyle
+ngStyle this method is used to style the data dynamically.
+[ngStyle]="{backgroundColor:callsomefunction()}"
+
+ngClass
+[ngClass]="{callsomefunction}" or some expression can be here
+[ngClass]="{online:serverStatus==='online'}"
+
+ngFor
+<app-server *ngFor="let server of servers;let i = index"></app-server>
